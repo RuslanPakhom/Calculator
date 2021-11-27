@@ -1,8 +1,8 @@
 const WORDSIGNS = {
     "plus" : "+",
     "minus" : "-",
-    "mult" : "*",
-    "division" : "/"
+    "mult" : "×",
+    "division" : "÷"
 }
 
 let displayValue = '0'
@@ -39,6 +39,36 @@ signs.forEach((sign) => {
     sign.addEventListener('click', signButton)
 })
 
+window.addEventListener('keyup', (e) => {
+    if(e.key >= '0' && e.key <= '9'){
+        let numNode = document.querySelector("#num"+e.key).click()
+    }
+    if(e.key === '.'){
+        let dotNode = document.querySelector("#dot").click()
+    }
+    if(e.key==="+"){
+    plus.click()
+    }
+    if(e.key==="-"){
+        minus.click()
+    }
+    if(e.key==="/"){
+        division.click()
+    }
+    if(e.key==="*"){
+        mult.click()
+    }
+    if (e.key === "="){
+        equal.click()
+    }
+    if(e.key === "Backspace"){
+        backspace.click()
+    }
+    if(e.key === "c" || e.key === "C"){
+        clear.click()
+    }
+})
+
 /* Callbacks */
 
 function clearButton (e) {
@@ -53,40 +83,41 @@ function clearButton (e) {
 }
 
 function backspaceButton (e) {
-    if(displayValue.length === 1){
+    if(displayValue.length === 1 || displayValue === ''){
         displayValue = '0'
         
     }
     else{
         displayValue = displayValue.slice(0,displayValue.length-1)
     }
+    
     display.textContent = displayValue
 }
 
 function equalButton(e){
     if(valueA && currentSign){
+        if(displayValue === ''){
+            return
+        }
     valueB = displayValue
     answer = operate(WORDSIGNS[currentSign],valueA,valueB).toString()
     calc.textContent = `${valueA}${WORDSIGNS[currentSign]}${valueB}=`
-    displayValue = answer
     display.textContent = answer
+    displayValue = '0'
     
     if(answerIsError()){
         answer = ''
-    }
-    
-    valueB = ''
+    }    
     valueA = ''
+    valueB = ''
     currentSign = ''
-    
-    
     }
 
 }
 
 function numberButton(e){
     if(displayValue.length < 11){
-        if(e.target.textContent === '.' && !displayValue.includes('.')){
+        if(e.target.textContent === '.' && (!displayValue.includes('.') && displayValue!=='')){
             displayValue = displayValue + e.target.textContent;
             display.textContent = displayValue
         }
@@ -94,7 +125,7 @@ function numberButton(e){
             displayValue = displayValue + e.target.textContent;
             display.textContent = displayValue
         }
-        if(e.target.textContent === '0' && displayValue==='0'){
+        if(e.target.textContent === '0' && displayValue === '0'){
             display.textContent = displayValue
         }
         if(e.target.textContent >= '1' && e.target.textContent <= '9'){
@@ -102,6 +133,7 @@ function numberButton(e){
             displayValue = Number(displayValue).toString()
             display.textContent = displayValue
         }
+        answer = ''
     }
     
  
@@ -109,8 +141,6 @@ function numberButton(e){
 }
 
 function signButton(e){
-    console.log(typeof valueA)
-    console.log(typeof valueB)
 
     if(!valueA){
         if(answer){
@@ -128,16 +158,37 @@ function signButton(e){
       
     }
     else{
+        if(displayValue === ''){
+            currentSign = e.target.id
+            calc.textContent = `${valueA}${WORDSIGNS[currentSign]}`
+            displayValue = '0'
+            display.textContent = displayValue
+            return
+        }
         valueB = displayValue;
         answer = operate(WORDSIGNS[currentSign],valueA,valueB).toString();
-        displayValue = '0'
-        currentSign = e.target.id 
-        calc.textContent = `${answer}${WORDSIGNS[currentSign]}`
         display.textContent = answer
         if(answerIsError()){
             answer = ''
-        }
-        valueA = answer 
+            calc.textContent = `${valueA}${WORDSIGNS[currentSign]}${valueB}=`
+            valueA = ''
+            valueB = ''
+            currentSign = ''
+            displayValue = '0'
+            
+         }
+         else{
+
+            calc.textContent = `${valueA}${WORDSIGNS[currentSign]}${valueB}=`
+            currentSign = e.target.id 
+            calc.textContent += `${answer}${WORDSIGNS[currentSign]}`
+            valueA = answer    
+            displayValue = ''      
+         }
+
+        
+        
+        
 
         
     }
@@ -147,7 +198,9 @@ function signButton(e){
 }
 
 function answerIsError(){
-    return answer === 'ERROR'
+    
+    return answer === "ERROR"
+    
 }
 
 /* Calculations */
@@ -182,11 +235,11 @@ function operate(operator,a,b){
             result = subtract(a,b)
             break
 
-        case "*":
+        case "×":
             result = multiply(a,b)
             break
 
-        case "/":
+        case "÷":
             result = divide(a,b)
             break
 
