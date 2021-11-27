@@ -24,16 +24,27 @@ body{
 
 .screen{
     width:100%;
-    height:20%;
+    height:30%;
     border:10px solid black;
     border-radius: 10px;
     background-color: rgb(241,243,240);
-    text-align:right;
-    font-size: 48px;
     font-family:"Orbitron",sans-serif;
     color:rgb(53,47,45);
     padding:0 5px;
     
+}
+
+.calc{
+    height:30%;
+    font-size:24px;
+    text-align: right;
+}
+
+.display{
+    text-align:right;
+    font-size: 50px;
+    height:70%;
+    overflow: scroll;
 }
 
 .numpad{
