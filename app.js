@@ -193,7 +193,6 @@ function signButton(e){
         
     }
     
-    console.log(currentSign)
 
 }
 
@@ -244,7 +243,6 @@ function operate(operator,a,b){
             break
 
         default:
-            console.log(operator)
             break
     }
 
